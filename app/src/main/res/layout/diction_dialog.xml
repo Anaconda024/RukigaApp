@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="24dp"
+    app:cardMaxElevation="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/createDialogHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/create_diction"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editEnglish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:hint="@string/english"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textColor="@android:color/primary_text_light"
+            android:textColorHint="@android:color/primary_text_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editRukiga" />
+
+        <EditText
+            android:id="@+id/editRukiga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edittext"
+            android:ems="10"
+            android:hint="@string/rukiga"
+            android:inputType="text"
+            android:minHeight="48dp"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textColor="@android:color/primary_text_light"
+            android:textColorHint="@android:color/primary_text_light"
+            app:layout_constraintStart_toStartOf="@+id/editEnglish"
+            app:layout_constraintTop_toBottomOf="@+id/createDialogHeader" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/select_category"
+            android:textColorHint="@color/black"
+            app:layout_constraintEnd_toEndOf="@+id/editRukiga"
+            app:layout_constraintStart_toStartOf="@+id/editRukiga"
+            app:layout_constraintTop_toBottomOf="@+id/editEnglish"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp">
+            <AutoCompleteTextView
+                android:id="@+id/autoCompleteTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:background="@color/white"
+                android:textColor="@android:color/primary_text_light"
+                app:layout_constraintStart_toStartOf="@+id/editRukiga"
+                app:layout_constraintTop_toBottomOf="@+id/editRukiga" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/cancelButton"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@android:string/cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/saveButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

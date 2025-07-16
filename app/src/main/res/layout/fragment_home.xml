@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context=".ui.home.HomeFragment">
+
+    <ScrollView
+        android:id="@+id/home_scollview"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="@string/home_scroll_view"
+        app:layout_constraintBottom_toTopOf="@+id/new_test"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView2" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="393dp"
+        android:layout_height="296dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/background_image_description"
+        android:fadingEdge="horizontal"
+        android:fadingEdgeLength="20dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_background_2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/new_test"
+        android:layout_width="80dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/roundedbutton"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="0.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/new_test"
+            android:src="@drawable/quiz_submissions2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_test"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/white"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/new_entry"
+        android:layout_width="80dp"
+        android:layout_height="74dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/roundedbutton"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="0.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/profile"
+        app:layout_constraintStart_toEndOf="@+id/new_test">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/dictionary"
+            android:src="@drawable/list_ul_alt2" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/dictionary"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/white"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile"
+        android:layout_width="80dp"
+        android:layout_height="74dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/roundedbutton"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="0.5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:contentDescription="@string/profile"
+            android:src="@drawable/account_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="@android:color/white"
+            android:textStyle="normal" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

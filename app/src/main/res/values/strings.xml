@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">RukigaApp</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="home_scroll_view">home scroll view</string>
+    <string name="new_test">New Test</string>
+    <string name="new_entry">New Diction</string>
+    <string name="background_image_description">this is the background image</string>
+    <string name="leankiga">LeanKiga</string>
+    <string name="library">Library</string>
+    <string name="quiz">Quiz</string>
+    <string name="add_diction">add diction</string>
+    <string name="select_category">Select Category</string>
+    <string name="rukiga">Rukiga</string>
+    <string name="english">English</string>
+    <string name="create_diction">Create Diction</string>
+    <string name="save">Save</string>
+    <string name="filter">Filter</string>
+    <string name="learn_kiga_title">LearnKiga</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="profile">Profile</string>
+</resources>
