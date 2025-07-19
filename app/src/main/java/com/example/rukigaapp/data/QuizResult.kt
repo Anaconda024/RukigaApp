@@ -27,5 +27,6 @@ data class QuizResult(
     val questionCount: Int,
     val answeredCorrect: String?,
     val answeredWrong: String?,
+    val isWritten: Boolean = false,
     val deleted: Boolean = false,
 )
