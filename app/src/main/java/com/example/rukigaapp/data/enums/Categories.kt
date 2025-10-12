@@ -1,4 +1,4 @@
-package com.example.rukigaapp.data
+package com.example.rukigaapp.data.enums
 
 enum class Categories(val id: Int, val displayName: String, val color: String) {
     Phrase(1, "Phrase", "#346940"),

@@ -16,12 +16,6 @@ class QuizResultRepository(private val quizResultDao: QuizResultDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
-    suspend fun delete(quizResult: QuizResult) {
-        quizResultDao.deleteQuizResult(quizResult)
-    }
-
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
     suspend fun softDeleteQuizResult(quizResult: Int) {
         quizResultDao.softDeleteQuizResult(quizResult)
     }
@@ -30,10 +24,5 @@ class QuizResultRepository(private val quizResultDao: QuizResultDao) {
     @WorkerThread
     suspend fun getquizResultById(quizResultId: Int): QuizResult? {
         return quizResultDao.getQuizResult(quizResultId)
-    }
-    @Suppress("RedundantSuspendModifier")
-    @WorkerThread
-    suspend fun getquizResultByCategory(categoryId: Int): Flow<List<QuizResult>> {
-        return quizResultDao.getQuizResultsByCategory(categoryId)
     }
 }

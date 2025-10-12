@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -16,14 +17,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rukigaapp.data.Categories
+import com.example.rukigaapp.data.enums.Categories
 import com.example.rukigaapp.databinding.DictionDialogBinding
 import com.example.rukigaapp.databinding.FragmentDictionaryBinding
-import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.services.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
+import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.ui.dictionary.adapters.DictionAdapter
 import kotlinx.coroutines.launch
+
 
 class DictionaryFragment : Fragment() {
     private var _binding: FragmentDictionaryBinding? = null
@@ -135,17 +137,30 @@ class DictionaryFragment : Fragment() {
             // autoCompleteTextView.showDropDown()
         }
 
-        // Set up AutoComplete dropdown (example)
+
+        // Set up AutoComplete dropdown
         val categories = Categories.entries.map { it.displayName }
-        val adapter =
-            ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, categories)
-        dialogBinding.autoCompleteTextView.setAdapter(adapter)
+        val adapter = ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, categories)
+        autoCompleteTextView.setAdapter(adapter)
+
+// Hide keyboard when clicked
+        autoCompleteTextView.setOnClickListener { view ->
+            hideKeyboard(view)
+            autoCompleteTextView.hint = ""
+            autoCompleteTextView.showDropDown() // optional: ensures dropdown opens
+        }
+
+// Clear hint when an item is selected
+        autoCompleteTextView.setOnItemClickListener { _, _, _, _ ->
+            // the user selected an item → hide the floating hint
+            dialogBinding.textInputLayoutCategory.hint = ""
+        }
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
             .setCancelable(true)
             .create()
-        dialogBinding.saveButton.setOnClickListener {
+        dialogBinding.submitButton.setOnClickListener {
             // Dismiss the dialog immediately
             dialog.dismiss()
             // Ensure the state reflects the dialog is no longer needed/active
@@ -168,6 +183,7 @@ class DictionaryFragment : Fragment() {
         }
         dialogBinding.cancelButton.setOnClickListener {
             viewModel.onEvent(DictionEvent.HideDialog)
+            dialog.dismiss()
         }
         dialog.setOnDismissListener {
             // This will be called when the dialog is dismissed for any reason,
@@ -176,6 +192,8 @@ class DictionaryFragment : Fragment() {
         }
         dialog.show()
     }
+
+
     private fun hideKeyboard(view: View) {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

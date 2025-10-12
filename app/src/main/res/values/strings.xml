@@ -8,6 +8,7 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
+    <string name="submit">Submit</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="home_scroll_view">home scroll view</string>
@@ -30,5 +31,26 @@
     <string name="set_up_quiz">Set Up Quiz</string>
     <string name="start">Start</string>
     <string name="select_type">Select Type</string>
-    <string name="select_number_of_questions">select Number Of Questions</string>
+    <string name="select_number_of_questions">Select Number Of Questions</string>
+    <string name="new_quiz">New Quiz</string>
+    <string name="do_you_want_to_type_out_answers">Do You Want To Type Out Answers</string>
+    <string name="select">Select</string>
+    <string name="quiz_title">Quiz</string>
+    <string name="question_progress">Question 5/10</string>
+    <string name="question_text">What is the tallest mountain in Africa?</string>
+    <string name="answer_hint">Type your answer here</string>
+    <string name="skip_button">Skip</string>
+    <string name="next_button">Next</string>
+    <string name="wrong_button">Wrong</string>
+    <string name="back_button_desc">Navigate back</string>
+    <string name="close_button_desc">Close quiz</string>
+    <!-- Quiz Setup Dialog Strings -->
+    <string name="quiz_type">Quiz Type</string>
+    <string name="select_quiz_type">Select quiz type</string>
+    <string name="number_of_questions">Number of Questions</string>
+    <string name="eg_10">e.g. 10</string>
+    <string name="typed">Typed</string>
+    <string name="cancel">Cancel</string>
+    <string name="type_here">Type Here</string>
+
 </resources>

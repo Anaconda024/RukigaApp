@@ -1,4 +1,4 @@
-package com.example.rukigaapp.data
+package com.example.rukigaapp.data.enums
 
 enum class QuizCategories (val id: Int, val displayName: String) {
     RukigaToEnglish(1, "Rukiga To English"),

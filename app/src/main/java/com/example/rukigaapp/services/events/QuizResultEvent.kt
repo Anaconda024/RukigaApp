@@ -16,11 +16,14 @@ sealed interface QuizResultEvent {
     data class SetQuizResultAnsweredCorrect(val answeredCorrect: String?) : QuizResultEvent
     data class SetQuizResultAnsweredWrong(val answeredWrong: String?) : QuizResultEvent
     data class setQuizResultIsWritten(val isWritten: Boolean) : QuizResultEvent
-    data class SetQuizResultDeleted(val deleted: Boolean) : QuizResultEvent
+
+    object ShowAddQuizResultDialog : QuizResultEvent
+    object HideAddQuizResultDialog : QuizResultEvent
+    object ClearErrorMessage : QuizResultEvent
 
     // Event to delete a QuizResult by its ID
     data class DeleteQuizResult(val id: Int) : QuizResultEvent
 
     // Optional: Event to load a QuizResult (e.g., for editing)
-    data class LoadQuizResult(val id: Int) : QuizResultEvent
+    data class LoadQuizResult(val quizResult: QuizResult) : QuizResultEvent
 }

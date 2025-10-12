@@ -2,137 +2,205 @@
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="24dp"
-    app:cardMaxElevation="10dp">
+    android:layout_margin="20dp"
+    app:cardBackgroundColor="@color/background_dark">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="24dp"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/createDialogHeader"
-            android:layout_width="wrap_content"
+        <!-- Drag handle -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:text="@string/set_up_quiz"
-            android:textAllCaps="true"
-            android:textColor="@color/design_default_color_on_secondary"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:gravity="center"
+            android:padding="8dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/selectCategory"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="182dp"
+            <View
+                android:layout_width="32dp"
+                android:layout_height="4dp"
+                android:background="@drawable/bg_drag_handle" />
+
+        </LinearLayout>
+
+        <!-- Main content -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/select_category"
-            android:textColorHint="@color/black"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:layout_constraintEnd_toEndOf="@+id/createDialogHeader"
-            app:layout_constraintStart_toStartOf="@+id/createDialogHeader"
-            app:layout_constraintTop_toBottomOf="@+id/createDialogHeader">
+            android:orientation="vertical"
+            android:padding="24dp">
 
-            <AutoCompleteTextView
-                android:id="@+id/selectCategoryTextView"
+            <!-- Title -->
+            <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:inputType="none"
-                android:textColor="@android:color/primary_text_light"
-                app:layout_constraintStart_toStartOf="@+id/editRukiga"
-                app:layout_constraintTop_toBottomOf="@+id/editRukiga" />
+                android:text="@string/new_test"
+                android:textColor="@color/text_primary_dark"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="24dp" />
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/selectQuestionNumber"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/select_number_of_questions"
-            android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/selectCategory"
-            app:layout_constraintStart_toStartOf="@+id/selectCategory"
-            app:layout_constraintTop_toBottomOf="@+id/selectCategory"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp">
-            <AutoCompleteTextView
-                android:id="@+id/selectQuestionNumberTextView"
+            <!-- Quiz Type Dropdown -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:background="@color/white"
-                android:textColor="@android:color/primary_text_light"
-                app:layout_constraintStart_toStartOf="@+id/editRukiga"
-                app:layout_constraintTop_toBottomOf="@+id/editRukiga" />
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/quizTypeLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/quiz_type"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/selectWritten"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="@string/select_type"
-            android:textColorHint="@color/black"
-            app:layout_constraintEnd_toEndOf="@+id/selectQuestionNumber"
-            app:layout_constraintStart_toStartOf="@+id/selectQuestionNumber"
-            app:layout_constraintTop_toBottomOf="@+id/selectQuestionNumber"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp">
-            <AutoCompleteTextView
-                android:id="@+id/selectWrittenTextView"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/quizTypeLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/primary_70"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/white"
+                    app:endIconMode="dropdown_menu">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/selectCategoryTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="@string/select_quiz_type"
+                        android:textColor="@color/surface_dark"
+                        android:textSize="16sp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@color/primary_20" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- Number of Questions Input -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:background="@color/white"
-                android:textColor="@android:color/primary_text_light"
-                app:layout_constraintStart_toStartOf="@+id/editRukiga"
-                app:layout_constraintTop_toBottomOf="@+id/editRukiga" />
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <TextView
+                    android:id="@+id/numQuestionsLabel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/number_of_questions"
+                    android:textColor="@color/white"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="8dp" />
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/numQuestionsLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/primary_70"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:hintTextColor="@color/white"
+                    app:endIconMode="dropdown_menu">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/selectQuestionNumberTextView"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:hint="@string/eg_10"
+                        android:inputType="number"
+                        android:textColor="@color/surface_dark"
+                        android:textSize="16sp"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:background="@color/primary_20" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <!-- Toggle Switch -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingVertical="8dp">
+
+                <TextView
+                    android:id="@+id/typedLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/typed"
+                    android:textColor="@color/text_primary_dark"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/typedSwitch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:trackTint="@color/switch_track"
+                    app:thumbTint="@color/white" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="@string/start"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cancelButton"
-            app:layout_constraintTop_toTopOf="@+id/cancelButton" />
+            android:orientation="horizontal"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp"
+            android:paddingTop="8dp">
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="@android:string/cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/saveButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/selectWritten" />
+            <!-- Skip Button -->
+            <Button
+                android:id="@+id/cancel_button"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:minHeight="48dp"
+                android:text="@string/cancel"
+                android:textColor="@color/colorPrimary"
+                android:textSize="16sp"
+                app:strokeColor="@color/colorPrimary"
+                app:strokeWidth="2dp" />
 
+            <!-- Next Button -->
+            <Button
+                android:id="@+id/submit_button"
+                style="@style/Widget.Material3.Button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/colorPrimary"
+                android:minHeight="48dp"
+                android:text="@string/save"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
 </androidx.cardview.widget.CardView>

@@ -1,13 +1,13 @@
 package com.example.rukigaapp.ui.dictionary.adapters
 
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rukigaapp.data.Category // Assuming you have this
-import com.example.rukigaapp.data.Categories // Your enum
+import com.example.rukigaapp.data.enums.Categories // Your enum
 import com.example.rukigaapp.data.Diction
 import com.example.rukigaapp.databinding.DictionItemBinding
 import androidx.core.graphics.toColorInt
@@ -40,29 +40,15 @@ class DictionAdapter(
             binding.textRukiga.text = diction.rukiga
             binding.textEnglish.text = diction.english
 
-            val categoryColorButton = binding.categoryColor
-
-            // Find the category from the enum using the diction's categoryId
             val categoryEnumEntry = Categories.fromId(diction.categoryId)
+            val categoryDot = binding.categoryDot
 
-            if (categoryEnumEntry != null) {
-                // Parse the color string from the enum and set it
-                try {
-                    categoryColorButton.setBackgroundColor(categoryEnumEntry.color.toColorInt())
-                } catch (e: IllegalArgumentException) {
-                    // Handle cases where the color string might be invalid
-                    // Set a default color in case of error
-                    categoryColorButton.setBackgroundColor(Color.GRAY) // Or some other default
-                    // Log the error if needed: Log.e("DictionAdapter", "Invalid color string: ${categoryEnumEntry.color}", e)
-                }
-            } else {
-                // Handle cases where diction.categoryId doesn't match any known category
-                // This could be your "Other" category or a default color
-                try {
-                    categoryColorButton.setBackgroundColor(Categories.Other.color.toColorInt())
-                } catch (e: IllegalArgumentException) {
-                    categoryColorButton.setBackgroundColor(Color.LTGRAY) // Fallback default
-                }
+
+            try {
+                val color = categoryEnumEntry?.color?.toColorInt() ?: Categories.Other.color.toColorInt()
+                binding.categoryDot.setBackgroundColor(color)
+            } catch (e: Exception) {
+                binding.categoryDot.setBackgroundColor(Color.GRAY)
             }
 
             binding.root.setOnClickListener {

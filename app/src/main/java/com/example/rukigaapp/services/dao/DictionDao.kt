@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Upsert
 import com.example.rukigaapp.data.Diction
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
 @Dao
@@ -19,6 +20,16 @@ interface DictionDao {
 
     @Query("SELECT * FROM dictionaries WHERE id = :dictionId") // Select all columns for the Diction object
     fun getDiction(dictionId: Int) : Diction?
+
+    @Query(
+        "SELECT x.*, y.name AS categoryName FROM dictionaries x " + // Added AS categoryName for clarity
+                "INNER JOIN categories y ON x.categoryId = y.id " +
+                "WHERE x.deleted = 0 " +
+                "AND (:dictionCategoryId IS NULL OR x.categoryId = :dictionCategoryId) " + // Key change here
+                "ORDER BY RANDOM() " +
+                "LIMIT :numberOfQuestions"
+    )
+    fun getDictionForQuiz(dictionCategoryId: Int?, numberOfQuestions: Int? = 30): Flow<List<Diction>>
 
     @Upsert
     suspend fun upsertDiction(diction: Diction)

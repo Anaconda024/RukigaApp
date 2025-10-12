@@ -4,6 +4,8 @@ import kotlinx.coroutines.flow.Flow
 
 import com.example.rukigaapp.data.Diction
 import com.example.rukigaapp.services.dao.DictionDao
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 class DictionRepository(private val dictionDao: DictionDao) {
     val allDiction: Flow<List<Diction>> = dictionDao.getDictions()
@@ -28,6 +30,12 @@ class DictionRepository(private val dictionDao: DictionDao) {
 
     @Suppress("RedundantSuspendModifier")
     @WorkerThread
+    suspend fun getDictionForQuiz(categoryId: Int?, numberOfQuestions: Int?): Flow<List<Diction>> {
+        return dictionDao.getDictionForQuiz(categoryId,numberOfQuestions)
+    }
+
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
     suspend fun getdictionById(dictionId: Int): Diction? {
         return dictionDao.getDiction(dictionId)
     }
@@ -36,4 +44,6 @@ class DictionRepository(private val dictionDao: DictionDao) {
     suspend fun getdictionByCategory(categoryId: Int): Flow<List<Diction>> {
         return dictionDao.getDictionsByCategory(categoryId)
     }
+
+
 }

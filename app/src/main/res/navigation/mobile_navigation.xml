@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_nav_home_to_nav_quiz"
             app:destination="@id/nav_quiz" />
+        <action
+            android:id="@+id/action_nav_home_to_quizHistoryFragment"
+            app:destination="@id/quizHistoryFragment" />
     </fragment>
 
     <fragment
@@ -29,4 +32,13 @@
         android:name="com.example.rukigaapp.ui.quiz.QuizFragment"
         android:label=""
         tools:layout="@layout/fragment_quiz" />
+    <fragment
+        android:id="@+id/quizHistoryFragment"
+        android:name="com.example.rukigaapp.ui.quizhistory.QuizHistoryFragment"
+        android:label="fragment_quiz_history"
+        tools:layout="@layout/fragment_quiz_history" >
+        <action
+            android:id="@+id/action_quizHistoryFragment_to_nav_quiz"
+            app:destination="@id/nav_quiz" />
+    </fragment>
 </navigation>

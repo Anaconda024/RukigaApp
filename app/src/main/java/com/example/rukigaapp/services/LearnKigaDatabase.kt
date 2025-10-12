@@ -8,9 +8,12 @@ import com.example.rukigaapp.data.Category
 import com.example.rukigaapp.data.Diction
 import com.example.rukigaapp.data.QuizCategory
 import com.example.rukigaapp.data.QuizResult
+import com.example.rukigaapp.data.enums.Categories
+import com.example.rukigaapp.data.enums.QuizCategories
 import com.example.rukigaapp.services.dao.CategoryDao
 import com.example.rukigaapp.services.dao.DictionDao
 import com.example.rukigaapp.services.dao.QuizCategoryDao
+import com.example.rukigaapp.services.dao.QuizResultDao
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +27,7 @@ abstract class LearnKigaDatabase: RoomDatabase() {
     abstract val dictionDao: DictionDao
     abstract fun categoryDao(): CategoryDao
     abstract fun quizCategoryDao(): QuizCategoryDao
+    abstract fun quizResultDao(): QuizResultDao
 
     companion object {
         @Volatile
@@ -54,7 +58,7 @@ abstract class LearnKigaDatabase: RoomDatabase() {
         suspend fun populateCategories(categoryDao: CategoryDao) {
             // Your enum values
             val predefinedCategories =
-                com.example.rukigaapp.data.Categories.entries.map { enumValue ->
+                Categories.entries.map { enumValue ->
                     Category(
                         id = enumValue.id, // Use the ID from the enum
                         name = enumValue.displayName,
@@ -67,7 +71,7 @@ abstract class LearnKigaDatabase: RoomDatabase() {
         suspend fun populateQuizCategories(quizCategoryDao: QuizCategoryDao) {
             // Your enum values
             val predefinedCategories =
-                com.example.rukigaapp.data.QuizCategories.entries.map { enumValue ->
+                QuizCategories.entries.map { enumValue ->
                     QuizCategory(
                         id = enumValue.id, // Use the ID from the enum
                         name = enumValue.displayName,
