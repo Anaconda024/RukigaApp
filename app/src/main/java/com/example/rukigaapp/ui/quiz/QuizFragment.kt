@@ -134,6 +134,7 @@ class QuizFragment : Fragment() {
 
 
             viewModel.setQuizConfig(selectedCategoryInt, selectedQuestionNumber, selectedWritten)
+            //SetQuestion()
             //Submit
             dialog.dismiss()
             // Ensure the state reflects the dialog is no longer needed/active
