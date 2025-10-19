@@ -27,6 +27,25 @@ class DictionaryViewModel(
 
     fun onEvent(event: DictionEvent) {
         when (event) {
+            is DictionEvent.SelectDiction -> {
+                _state.update { it.copy(
+                    isAddingDiction = true, // To show the dialog
+                    id = event.diction.id,
+                    english = event.diction.english,
+                    rukiga = event.diction.rukiga,
+                    categoryId = event.diction.categoryId
+                ) }
+            }
+            DictionEvent.ShowDialog -> {
+                _state.update { it.copy(
+                    isAddingDiction = true,
+                    // Clear previous data for a new entry
+                    id = null,
+                    english = "",
+                    rukiga = "",
+                    categoryId = 0
+                ) }
+            }
             is DictionEvent.SetDictionEnglish -> {
                 _state.value = _state.value.copy(english = event.english)
             }
@@ -52,10 +71,6 @@ class DictionaryViewModel(
             is DictionEvent.SoftDeleteDiction -> {
                 viewModelScope.launch { repository.softDeleteDiction(event.dictionId) }
             }
-            // Implement this similarly if needed
-            DictionEvent.ShowDialog -> {
-                _state.value = _state.value.copy(isAddingDiction = true)
-            }
 
             is DictionEvent.SortDiction -> {
                 _sortType.value = event.sortType
@@ -68,13 +83,29 @@ class DictionaryViewModel(
             is DictionEvent.ClearErrorMessage -> {
                 _state.value.errorMessage = null
             }
+
+            is DictionEvent.SetDictionId -> {
+                _state.value = _state.value.copy(id = event.id)
+            }
         }
 
     }
 
 
     private fun saveDictionToDb() {
-        val diction = _state.value.let { Diction(english = it.english, rukiga = it.rukiga, categoryId = it.categoryId) }
+        val currentState = _state.value
+        // Ensure fields are not blank
+        if (currentState.english.isBlank() || currentState.rukiga.isBlank()) {
+            // Optionally, set an error message in the state
+            return
+        }
+
+        val diction = Diction(
+            id = currentState.id ?: 0, // Use existing ID or 0 for new item
+            english = currentState.english,
+            rukiga = currentState.rukiga,
+            categoryId = currentState.categoryId
+        )
         viewModelScope.launch {
             if (diction != null) {
                 repository.upsert(diction)

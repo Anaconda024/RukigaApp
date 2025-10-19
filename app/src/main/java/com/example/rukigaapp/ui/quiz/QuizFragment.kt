@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -134,7 +135,7 @@ class QuizFragment : Fragment() {
 
 
             viewModel.setQuizConfig(selectedCategoryInt, selectedQuestionNumber, selectedWritten)
-            //SetQuestion()
+            SetQuestion()
             //Submit
             dialog.dismiss()
             // Ensure the state reflects the dialog is no longer needed/active
@@ -162,7 +163,27 @@ class QuizFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
+    private fun SetQuestion() {
+        val quizBinding = FragmentQuizBinding.inflate(layoutInflater)
+        val currentQuestion = viewModel.currentQuestion ?: run {
+            // Show error message
+            showError("No questions available")
+            return
+        }
 
+        updateUI(currentQuestion)
+
+        quizBinding.nextButton.setOnClickListener() {
+            val answer = quizBinding.answerInput.text
+            val mark = viewModel.markInput(answer.toString(), currentQuestion)
+        }
+    }
+
+    private fun showError(message: String) {
+        // Show toast, snackbar, or update UI with error message
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+        // Optionally navigate back or disable UI
+    }
 
     public fun saveQuizResult() {
         val quizResult = QuizResult(

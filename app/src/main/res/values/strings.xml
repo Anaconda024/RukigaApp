@@ -52,5 +52,7 @@
     <string name="typed">Typed</string>
     <string name="cancel">Cancel</string>
     <string name="type_here">Type Here</string>
+    <string name="edit_title">Edit Title</string>
+    <string name="filter_dictionary">Filter Dictionary</string>
 
 </resources>

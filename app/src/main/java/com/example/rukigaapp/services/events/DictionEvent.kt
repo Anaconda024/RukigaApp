@@ -14,5 +14,7 @@ sealed interface DictionEvent {
     data class DeleteDiction(val diction: Diction): DictionEvent
     data class SoftDeleteDiction(val dictionId: Int): DictionEvent
     data class ClearErrorMessage(val errorMessage: String?): DictionEvent
+    data class SelectDiction(val diction: Diction) : DictionEvent
+    data class SetDictionId(val id: Int) : DictionEvent
 
 }
