@@ -2,6 +2,8 @@ package com.example.rukigaapp.services.dao
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Upsert
 import com.example.rukigaapp.data.Diction
@@ -39,4 +41,10 @@ interface DictionDao {
 
     @Query("Update dictionaries set deleted = 1 where id = :dictionId")// Select all columns for the Diction object
     fun softDeleteDiction(dictionId: Int)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(dictions: List<Diction>)
+
+    @Query("SELECT COUNT(*) FROM dictionaries")
+    suspend fun getCount(): Int
 }

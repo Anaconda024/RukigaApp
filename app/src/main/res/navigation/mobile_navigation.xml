@@ -31,7 +31,11 @@
         android:id="@+id/nav_quiz"
         android:name="com.example.rukigaapp.ui.quiz.QuizFragment"
         android:label=""
-        tools:layout="@layout/fragment_quiz" />
+        tools:layout="@layout/fragment_quiz" >
+        <action
+            android:id="@+id/action_nav_quiz_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
     <fragment
         android:id="@+id/quizHistoryFragment"
         android:name="com.example.rukigaapp.ui.quizhistory.QuizHistoryFragment"

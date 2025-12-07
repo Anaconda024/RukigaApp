@@ -44,6 +44,6 @@
     <color name="hint_color">#80e0dcd8</color>
 
     <!-- Add these to your existing colors.xml -->
-    <color name="switch_track">#4Dd46211</color>
+    <color name="switch_track_unchecked">#4Dd46211</color>
     <color name="switch_track_checked">#d46211</color>
 </resources>

@@ -21,10 +21,10 @@ data class QuizResult(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0, // Consider making it non-nullable if autoGenerate is true
     val dateTaken: String,
-    val score: Int,
+    var score: Int,
     val quizCategoryId: Int,
     val userId: String?,
-    val questionCount: Int,
+    var questionCount: Int,
     val answeredCorrect: String?,
     val answeredWrong: String?,
     val isWritten: Boolean = false,

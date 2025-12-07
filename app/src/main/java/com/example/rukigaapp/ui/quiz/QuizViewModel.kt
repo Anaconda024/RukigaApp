@@ -1,5 +1,6 @@
 package com.example.rukigaapp.ui.quiz
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.rukigaapp.data.Diction
@@ -52,7 +53,11 @@ class QuizViewModel(
             currentQuestionIndex
         )
 
-    public fun setQuizConfig(quizCategoryI: Int, numberOfQuestions: Int, isWritten: Boolean) {
+    private val TAG = "QuizVM"
+
+    public suspend fun setQuizConfig(quizCategoryI: Int, numberOfQuestions: Int, isWritten: Boolean) {
+        startNewQuiz()
+        _state.update { it.copy(isLoading = true) }
         quizConfig = QuizConfig(
             quizCategoryId = quizCategoryI,
             userId = "Ankunda",
@@ -64,6 +69,7 @@ class QuizViewModel(
         currentQuestion = quizQuestionsState.value.getOrNull(
             currentQuestionIndex
         )
+        Log.i(TAG, currentQuestion.toString())
     }
 
 
@@ -220,17 +226,25 @@ class QuizViewModel(
         }
     }
 
-    fun getQuizQuestions(quizConfig: QuizConfig) {
+    suspend  fun getQuizQuestions(quizConfig: QuizConfig) {
         viewModelScope.launch {
+            // --- START LOADING ---
+            _uiState.update { it.copy(isLoading = true) }
             try {
                 dictionRepository.getDictionForQuiz(quizConfig.dictionCategoryId, quizConfig.numberOfQuestions)
                     .map { dictionList -> dictionList.toQuizQuestions(quizConfig.quizCategoryId) }
                     .collect { questions ->
+                        Log.i(TAG, questions.toString())
                         _quizQuestionsState.value = questions
+                        Log.i(TAG, _quizQuestionsState.toString())
+                        // --- STOP LOADING ON SUCCESS ---
+                        _uiState.update { it.copy(isLoading = false) }
                     }
             } catch (e: Exception) {
                 // Handle error
                 _quizQuestionsState.value = emptyList()
+                // --- STOP LOADING ON SUCCESS ---
+                _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
@@ -276,16 +290,25 @@ class QuizViewModel(
     public fun markInput(
         answer: String,
         quizQuestion: QuizQuestion ?,
-        maxErrors: Int = 1
+        maxErrors: Int = 2,
+        notSkipped: Boolean = true
     ) : Boolean {
-        val user = answer.trim().lowercase()
-        val correct = quizQuestion!!.CorrectAnswer.trim().lowercase()
+        if(quizConfig!!.isWritten)
+        {
+            val user = answer.trim().lowercase()
+            val correct = quizQuestion!!.CorrectAnswer.trim().lowercase()
 
-        val isRight = user == correct ||
-                levenshtein(user, correct) <= maxErrors
+            val isRight = user == correct ||
+                    levenshtein(user, correct) <= maxErrors
 
-        saveAnswer(isRight, quizQuestion.QuestionId)
-        return isRight
+            saveAnswer(isRight, quizQuestion.QuestionId)
+            return isRight
+        }
+        else {
+            //If not written, skipping marks as wrong and not skipping marks as right
+            saveAnswer(notSkipped, quizQuestion!!.QuestionId)
+            return notSkipped
+        }
     }
 
     fun updateCurrentQuestion(question: QuizQuestion, newIndex: Int, total: Int) {

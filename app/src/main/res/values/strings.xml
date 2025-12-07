@@ -36,7 +36,7 @@
     <string name="do_you_want_to_type_out_answers">Do You Want To Type Out Answers</string>
     <string name="select">Select</string>
     <string name="quiz_title">Quiz</string>
-    <string name="question_progress">Question 5/10</string>
+    <string name="question_progress">Question 1/10</string>
     <string name="question_text">What is the tallest mountain in Africa?</string>
     <string name="answer_hint">Type your answer here</string>
     <string name="skip_button">Skip</string>
@@ -54,5 +54,6 @@
     <string name="type_here">Type Here</string>
     <string name="edit_title">Edit Title</string>
     <string name="filter_dictionary">Filter Dictionary</string>
+    <string name="finish">Finish</string>
 
 </resources>

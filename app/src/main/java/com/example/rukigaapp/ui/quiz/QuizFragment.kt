@@ -1,6 +1,6 @@
 package com.example.rukigaapp.ui.quiz
 
-import android.R
+//noinspection SuspiciousImport
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
@@ -13,7 +13,11 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.example.rukigaapp.data.QuizQuestion
 import com.example.rukigaapp.data.QuizResult
 import com.example.rukigaapp.data.enums.Categories
@@ -29,8 +33,11 @@ import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.services.events.QuizResultEvent
 import com.example.rukigaapp.ui.dictionary.DictionaryViewModel
 import com.example.rukigaapp.ui.dictionary.DictionaryViewModelFactory
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
+import android.R
+import com.example.rukigaapp.databinding.DialogQuizCompletionBinding
 import kotlinx.datetime.toLocalDateTime
 
 class QuizFragment : Fragment() {
@@ -74,6 +81,40 @@ class QuizFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        _binding?.closeButton?.setOnClickListener{
+            findNavController().navigate(com.example.rukigaapp.R.id.action_nav_quiz_to_nav_home)
+        }
+
+        binding.nextButton.setOnClickListener{
+            nextQuestion()
+        }
+
+        binding.skipButton.setOnClickListener{
+            nextQuestion(false)
+        }
+
+        // In your QuizFragment.kt inside onViewCreated
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    // Update your other UI components based on the state...
+                    // e.g., binding.questionText.text = state.currentQuestion?.Question
+
+                    // Show or hide the loading overlay
+                    if (state.isLoading) {
+                        showSpinner()
+                    } else {
+                        SetQuestion()
+                        hideSpinner()
+                    }
+                }
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
@@ -97,8 +138,10 @@ class QuizFragment : Fragment() {
         }
         selectCategoryTextView.setOnClickListener { view ->
             hideKeyboard(view)
-            // If the dropdown isn't showing automatically, you might need to call:
-            // selectCategoryTextView.showDropDown()
+        }
+
+        selectCategoryTextView.setOnItemClickListener { _, _, _, _ ->
+            dialogBinding.quizTypeLayout.hint = ""
         }
 
         // Set up AutoComplete dropdown (example)
@@ -117,10 +160,12 @@ class QuizFragment : Fragment() {
         val adapter2 = ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, questionNumbers)
         selectQuestionNumberTextView.setAdapter(adapter2)
 
+        selectQuestionNumberTextView.setOnItemClickListener{_, _, _, _ ->
+            dialogBinding.numQuestionsLayout.hint = ""
+        }
 
         // Second dropdown (select if typed)
         val selectWrittenTextView = dialogBinding.typedSwitch
-
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogBinding.root)
@@ -133,12 +178,13 @@ class QuizFragment : Fragment() {
             val selectedQuestionNumber = dialogBinding.selectQuestionNumberTextView.text.toString().toInt()
             val selectedWritten = selectWrittenTextView.isChecked
 
+            showSpinner()
 
-            viewModel.setQuizConfig(selectedCategoryInt, selectedQuestionNumber, selectedWritten)
-            SetQuestion()
-            //Submit
-            dialog.dismiss()
-            // Ensure the state reflects the dialog is no longer needed/active
+
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewModel.setQuizConfig(selectedCategoryInt, selectedQuestionNumber, selectedWritten)
+                dialog.dismiss()
+            }
 
 
             val currentMoment = Clock.System.now()
@@ -148,6 +194,7 @@ class QuizFragment : Fragment() {
         }
         dialogBinding.cancelButton.setOnClickListener {
             viewModel.onEvent(QuizResultEvent.HideAddQuizResultDialog)
+            hideSpinner()
             dialog.dismiss()
         }
         dialog.setOnDismissListener {
@@ -157,6 +204,8 @@ class QuizFragment : Fragment() {
         }
         dialog.show()
     }
+
+
     private fun hideKeyboard(view: View) {
         val inputMethodManager =
             requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -170,7 +219,11 @@ class QuizFragment : Fragment() {
             showError("No questions available")
             return
         }
-
+        quizBinding.answerInputLayout.visibility = if(viewModel.quizConfig?.isWritten == true) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
         updateUI(currentQuestion)
 
         quizBinding.nextButton.setOnClickListener() {
@@ -186,34 +239,99 @@ class QuizFragment : Fragment() {
     }
 
     public fun saveQuizResult() {
+        val score = viewModel.quizConfig?.numberOfQuestions!! - viewModel.answeredWrong.size
+        val dateTaken = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val userId = "Ankunda" // Hardcoded for now
+
         val quizResult = QuizResult(
-            // Get todays date and turn it into a string
-            dateTaken = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).toString(),
-            //minus the answerd wrong from the total questions in quiz config to get the score
-            score = 0,
-            //getfrom selected quiz category, probably from viewmodel quiz config
+            dateTaken = dateTaken.toString(),
+            score = score,
             quizCategoryId = viewModel.quizConfig?.quizCategoryId ?: 1,
-            userId = "Ankunda",
-            //get from qiz config
-            questionCount = 0,
+            userId = userId,
+            questionCount = viewModel.quizConfig?.numberOfQuestions!!,
             answeredCorrect = viewModel.answeredCorrect.toString(),
             answeredWrong = viewModel.answeredWrong.toString(),
         )
 
         viewModel.saveQuizResultToDb(quizResult)
+
+        // Show the summary dialog
+        showCompletionDialog(score, userId, dateTaken.toString())
     }
 
-    public fun updateUI(quizQuestion: QuizQuestion){
+    private fun showCompletionDialog(score: Int, userId: String, date: String) {
+        // Inflate dialog binding
+        val dialogBinding = DialogQuizCompletionBinding.inflate(layoutInflater)
+
+        // Set data
+        dialogBinding.tvUserId.text = "Congratulations, $userId!"
+        dialogBinding.tvScore.text = "$score / ${viewModel.quizConfig?.numberOfQuestions}"
+        dialogBinding.tvDate.text = "Date: ${date.substringBefore('T')}"
+
+        // Create dialog
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogBinding.root)
+            .setCancelable(false)
+            .create()
+
+        // Make dialog background transparent (so custom background shows)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        // Set button click listener
+        dialogBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+            findNavController().navigate(com.example.rukigaapp.R.id.action_nav_quiz_to_nav_home)
+        }
+
+        dialog.show()
+    }
+
+     fun updateUI(quizQuestion: QuizQuestion, questionNumber: Int = 1, totalQuestions: Int = 10){
         binding.questionText.text = quizQuestion.Question
+         binding.questionProgress.text = "Question $questionNumber/$totalQuestions"
     }
 
     public fun revealAnswer(quizQuestion: QuizQuestion){
         //binding.answerInput.text.setText(quizQuestion.CorrectAnswer)
     }
 
-    public fun nextQuestion(){
+    fun nextQuestion(notSkipped: Boolean = true){
+        val currentQuestion = viewModel.currentQuestion ?: return
+        val answer = binding.answerInput.text.toString()
+        if(notSkipped){
+            viewModel.markInput(answer, currentQuestion)
+        }
+        else{
+            //If question is skipped it is marked as wrong
+            viewModel.markInput(answer, currentQuestion,notSkipped= notSkipped)
+        }
+
+
         viewModel.currentQuestionIndex += 1
-        //update the ui with the new question
-        var currentQuestion = viewModel.currentQuestion
+        lastQuestionCheck()
+
+        if (viewModel.currentQuestionIndex < viewModel.quizQuestionsState.value.size) {
+            val nextQuestion = viewModel.currentQuestion
+            if (nextQuestion != null) {
+                updateUI(nextQuestion, viewModel.currentQuestionIndex + 1, viewModel.quizQuestionsState.value.size)
+            }
+        } else {
+            // This is the end of the quiz
+            saveQuizResult()
+        }
+    }
+
+    fun showSpinner() {
+        binding.loadingSpinnerOverlay.visibility = View.VISIBLE
+    }
+
+    fun hideSpinner() {
+        binding.loadingSpinnerOverlay.visibility = View.GONE
+    }
+
+    fun lastQuestionCheck(){
+        if(viewModel.currentQuestionIndex == viewModel.quizQuestionsState.value.size - 1) {
+        binding.nextButton.text = getString(com.example.rukigaapp.R.string.finish)
+        }
     }
 }

@@ -12,7 +12,8 @@ data class QuizUiState(
     val currentQuestion: QuizQuestion? = null, // Provide default if possible
     val currentIndex: Int = 0,
     val totalQuestions: Int = 0,
-    val isFinished: Boolean = false
+    val isFinished: Boolean = false,
+    val isLoading: Boolean = true
 )
 
 // Create a private MutableStateFlow that will hold the current state.
@@ -22,7 +23,8 @@ private val _uiState = MutableStateFlow(
         currentQuestion = null, // Or some initial question if available
         currentIndex = 0,
         totalQuestions = 0,     // Or a sensible default, e.g., from a loaded quiz
-        isFinished = false
+        isFinished = false,
+        isLoading = true
     )
 )
 

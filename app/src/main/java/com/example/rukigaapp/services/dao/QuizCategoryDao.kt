@@ -15,14 +15,12 @@ interface QuizCategoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE) // Or IGNORE
     suspend fun insertAllQuizCategories(categories: List<QuizCategory>)
 
-    @Query("SELECT * FROM categories ORDER BY name ASC") // Assuming your table is named 'categories'
+    @Query("SELECT * FROM quizCategories ORDER BY name ASC") // Assuming your table is named 'categories'
     fun getAllQuizCategories(): Flow<List<QuizCategory>>
 
-    @Query("SELECT * FROM categories WHERE id = :id")
+    @Query("SELECT * FROM quizCategories WHERE id = :id")
     suspend fun getQuizCategoryById(id: Int): QuizCategory?
 
-    @Query("SELECT COUNT(*) FROM categories")
+    @Query("SELECT COUNT(*) FROM quizCategories")
     suspend fun getCount(): Int
-
-    // Add other necessary query methods (findById, update, delete, etc.)
 }

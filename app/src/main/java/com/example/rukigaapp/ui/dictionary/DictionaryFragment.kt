@@ -161,7 +161,7 @@ class DictionaryFragment : Fragment() {
         // Hide keyboard when clicked
         autoCompleteTextView.setOnClickListener { view ->
             hideKeyboard(view)
-            autoCompleteTextView.hint = ""
+            //autoCompleteTextView.hint = ""
             autoCompleteTextView.showDropDown() // optional: ensures dropdown opens
         }
 
