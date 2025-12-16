@@ -55,5 +55,6 @@
     <string name="edit_title">Edit Title</string>
     <string name="filter_dictionary">Filter Dictionary</string>
     <string name="finish">Finish</string>
+    <string name="no_quiz_results">No quiz results.\nStart new quiz</string>
 
 </resources>
