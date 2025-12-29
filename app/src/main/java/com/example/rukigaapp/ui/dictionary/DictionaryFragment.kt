@@ -24,7 +24,7 @@ import com.example.rukigaapp.databinding.FragmentDictionaryBinding
 import com.example.rukigaapp.services.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
 import com.example.rukigaapp.services.events.DictionEvent
-import com.example.rukigaapp.ui.dictionary.adapters.DictionAdapter
+import com.example.rukigaapp.services.adapters.DictionAdapter
 import kotlinx.coroutines.launch
 
 
@@ -36,6 +36,16 @@ class DictionaryFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private var categoryId: Int? = null
+    private var categoryName: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Get arguments passed from HomeFragment
+        categoryId = arguments?.getInt("categoryId")
+        categoryName = arguments?.getString("categoryName")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +67,19 @@ class DictionaryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // If category filter is provided, apply it
+        categoryId?.let { id ->
+            if (id != -1) {
+                viewModel.onEvent(DictionEvent.FilterByCategory(id))
+
+                // Optionally update UI to show filtered category
+                categoryName?.let { name ->
+                    // You can add a TextView in your layout to show the filter
+                    binding.title.text = "Showing: $name"
+                }
+            }
+        }
 
         // Initialize the adapter
         dictionAdapter = DictionAdapter(

@@ -56,5 +56,25 @@
     <string name="filter_dictionary">Filter Dictionary</string>
     <string name="finish">Finish</string>
     <string name="no_quiz_results">No quiz results.\nStart new quiz</string>
+    <string name="username_or_email">Username or Email</string>
+    <string name="password">Password</string>
+    <string name="enter_your_username">Enter your username</string>
+    <string name="email_address">Email address</string>
+    <string name="email_hint">name@example.com</string>
+    <string name="create_password">Create a password</string>
+    <string name="my_profile">My Profile</string>
+    <string name="tap_to_edit_avatar">Tap to edit avatar</string>
+    <string name="username">Username</string>
+    <string name="change_email_hint">To change your email, please contact support.</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="log_out">Log Out</string>
+    <string name="avatar_description">Portrait of a person representing the user avatar</string>
+    <string name="back_button">Back</string>
+    <string name="settings_button">Settings</string>
+    <string name="edit_avatar">Edit avatar</string>
+    <string name="edit_username">Edit username</string>
+    <string name="email_locked">Email is locked</string>
+
+    <string name="default_web_client_id">26137426620-l15vnvf8mha3k1vpvch9d0ccujnsdemi.apps.googleusercontent.com</string>
 
 </resources>

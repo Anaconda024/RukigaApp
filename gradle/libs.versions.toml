@@ -15,6 +15,9 @@ navigationUiKtx = "2.8.8"
 room = "2.7.0"
 legacySupportV4 = "1.0.0"
 fragmentKtx = "1.5.6"
+googleServices = "4.4.4"
+firebaseBom = "34.7.0"
+googlePlayServicesAuth = "21.4.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,9 +37,13 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version = "0.6.0" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
 androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragmentKtx" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version = "23.2.1" }
+google-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "googlePlayServicesAuth" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 androidx-room = { id = "androidx.room", version.ref = "room" }
+google-gms-googleServices = { id = "com.google.gms.google-services", version.ref = "googleServices" }

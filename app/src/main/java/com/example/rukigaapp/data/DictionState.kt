@@ -1,7 +1,7 @@
 package com.example.rukigaapp.data
 
 data class DictionState(
-    val dictions: List<Diction> = emptyList(),
+    var dictions: List<Diction> = emptyList(),
     val id: Int? = null,
     val rukiga: String = "",
     val english: String = "",

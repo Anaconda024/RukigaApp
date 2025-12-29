@@ -20,32 +20,39 @@ class DictionaryViewModel(
 ) : ViewModel() {
     private val _sortType = MutableStateFlow(SortType.English)
     private val _state = MutableStateFlow(DictionState())
-    private val _diction = repository.allDiction
+    private var _diction = repository.allDiction
+    private val _filterCategoryId = MutableStateFlow<Int?>(null)
 
-    val state = combine(_state, _sortType, _diction, ::mergeState)
+    val state = combine(_state, _sortType, _diction, _filterCategoryId, ::mergeState)
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DictionState())
 
     fun onEvent(event: DictionEvent) {
         when (event) {
             is DictionEvent.SelectDiction -> {
-                _state.update { it.copy(
-                    isAddingDiction = true, // To show the dialog
-                    id = event.diction.id,
-                    english = event.diction.english,
-                    rukiga = event.diction.rukiga,
-                    categoryId = event.diction.categoryId
-                ) }
+                _state.update {
+                    it.copy(
+                        isAddingDiction = true, // To show the dialog
+                        id = event.diction.id,
+                        english = event.diction.english,
+                        rukiga = event.diction.rukiga,
+                        categoryId = event.diction.categoryId
+                    )
+                }
             }
+
             DictionEvent.ShowDialog -> {
-                _state.update { it.copy(
-                    isAddingDiction = true,
-                    // Clear previous data for a new entry
-                    id = null,
-                    english = "",
-                    rukiga = "",
-                    categoryId = 0
-                ) }
+                _state.update {
+                    it.copy(
+                        isAddingDiction = true,
+                        // Clear previous data for a new entry
+                        id = null,
+                        english = "",
+                        rukiga = "",
+                        categoryId = 0
+                    )
+                }
             }
+
             is DictionEvent.SetDictionEnglish -> {
                 _state.value = _state.value.copy(english = event.english)
             }
@@ -53,15 +60,18 @@ class DictionaryViewModel(
             is DictionEvent.SetDictionRukiga -> {
                 _state.value = _state.value.copy(rukiga = event.rukiga)
             }
+
             is DictionEvent.SetDictionCategoryId -> {
                 _state.value = _state.value.copy(categoryId = event.categoryId)
             }
 
             is DictionEvent.SaveDiction -> {
                 saveDictionToDb()
-                _state.update { it.copy(
-                    isAddingDiction = false, rukiga = "", english = "", categoryId = 0
-                ) }
+                _state.update {
+                    it.copy(
+                        isAddingDiction = false, rukiga = "", english = "", categoryId = 0
+                    )
+                }
             }
 
             is DictionEvent.DeleteDiction -> {
@@ -86,6 +96,11 @@ class DictionaryViewModel(
 
             is DictionEvent.SetDictionId -> {
                 _state.value = _state.value.copy(id = event.id)
+            }
+
+            // In your onEvent function, add:
+            is DictionEvent.FilterByCategory -> {
+                _filterCategoryId.value = event.categoryId
             }
         }
 
@@ -113,13 +128,20 @@ class DictionaryViewModel(
         }
     }
 
+    // Back to original mergeState
     private fun mergeState(
         state: DictionState,
         sortType: SortType,
-        diction: List<Diction>
+        diction: List<Diction>,
+        filterCategoryId: Int?
     ): DictionState {
+        val filteredDictions = if (filterCategoryId != null && filterCategoryId != -1) {
+            diction.filter { it.categoryId == filterCategoryId }
+        } else {
+            diction
+        }
         return state.copy(
-            dictions = diction,
+            dictions = filteredDictions,
             sortType = sortType
         )
     }

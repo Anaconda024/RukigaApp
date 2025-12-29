@@ -24,10 +24,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/learn_kiga_title"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        tools:text="LearnKiga" />
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="LearnKiga" />
 
     </androidx.appcompat.widget.Toolbar>
 

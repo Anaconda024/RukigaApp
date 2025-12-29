@@ -1,4 +1,4 @@
-package com.example.rukigaapp.ui.dictionary.adapters
+package com.example.rukigaapp.services.adapters
 
 import android.graphics.Color
 import android.graphics.PorterDuff

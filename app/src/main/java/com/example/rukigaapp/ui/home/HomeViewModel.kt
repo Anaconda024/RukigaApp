@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.rukigaapp.data.CategoryItem
 import com.example.rukigaapp.data.DictionState
+import com.example.rukigaapp.data.HomeState
 import com.example.rukigaapp.data.QuizResult
 import com.example.rukigaapp.data.QuizResultState
 import com.example.rukigaapp.services.DictionRepository
@@ -13,42 +15,51 @@ import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.services.events.QuizResultEvent
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class HomeViewModel (
-    private val quizResultRepository: QuizResultRepository
-): ViewModel() {
-    private val _state = MutableStateFlow(QuizResultState())
-    private val _quizResult = quizResultRepository.allQuizResult
+    private val quizResultRepository: QuizResultRepository,
+    private val dictionRepository: DictionRepository
+) : ViewModel() {
 
-    // The combine function now only takes two flows and a function that accepts two arguments
-    val state = combine(_state, _quizResult, ::mergeState)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), QuizResultState())
+    private val _state = MutableStateFlow(HomeState())
+    private val _quizResults = quizResultRepository.allQuizResult
+    private val _categories = MutableStateFlow<List<CategoryItem>>(emptyList())
 
-    // ... rest of your onEvent and other ViewModel logic
-
-    // --- THIS IS THE FUNCTION TO FIX ---
-    // Update the mergeState function to only accept two parameters
-    private fun mergeState(
-        state: QuizResultState,
-        quizResult: List<QuizResult>
-    ): QuizResultState {
-        // Now it correctly combines the UI state with the list of results from the database
-        return state.copy(
-            quizResults = quizResult
+    val state: StateFlow<HomeState> = combine(
+        _state,
+        _quizResults,
+        _categories
+    ) { state, quizResults, categories ->
+        state.copy(
+            quizResults = quizResults,
+            categories = categories
         )
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), HomeState())
+
+    init {
+        loadCategories()
+    }
+
+    private fun loadCategories() {
+        viewModelScope.launch {
+            try {
+                val categoriesWithCounts = dictionRepository.getAllCategoriesWithCounts()
+                _categories.value = categoriesWithCounts
+            } catch (e: Exception) {
+                _state.update { it.copy(errorMessage = "Failed to load categories: ${e.message}") }
+            }
+        }
     }
 
     fun onEvent(event: QuizResultEvent) {
         when (event) {
             is QuizResultEvent.LoadQuizResult -> {
-                _state.update { it.copy(
-                    isAddingQuizResult = true,
-                    id = event.quizResult.id,
-                )
-                }
+
             }
 
 

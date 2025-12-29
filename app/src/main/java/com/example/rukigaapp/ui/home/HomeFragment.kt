@@ -3,13 +3,10 @@ package com.example.rukigaapp.ui.home
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
@@ -19,28 +16,25 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rukigaapp.R
 import com.example.rukigaapp.databinding.FragmentHomeBinding
+import com.example.rukigaapp.services.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
 import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.adapters.CategoryAdapter
+import com.example.rukigaapp.services.adapters.QuizResultAdapter
 import com.example.rukigaapp.services.events.QuizResultEvent
-import com.example.rukigaapp.ui.dictionary.adapters.QuizResultAdapter
 import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     private lateinit var viewModel: HomeViewModel
     private lateinit var quizResultAdapter: QuizResultAdapter
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
+    private lateinit var categoryAdapter: CategoryAdapter
 
     private var _binding: FragmentHomeBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true) // Crucial for Fragment's options menu
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -48,11 +42,15 @@ class HomeFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val quizResultDao = LearnKigaDatabase.getDatabase(requireContext()).quizResultDao()
+        val database = LearnKigaDatabase.getDatabase(requireContext())
+        val quizResultDao = database.quizResultDao()
+        val dictionDao = database.dictionDao
 
-        val repository = QuizResultRepository(quizResultDao )
-        val factory = HomeViewModelFactory(repository)
-        viewModel = ViewModelProvider( this,  factory)[HomeViewModel::class.java]
+        val quizResultRepository = QuizResultRepository(quizResultDao)
+        val dictionRepository = DictionRepository(dictionDao)
+
+        val factory = HomeViewModelFactory(quizResultRepository, dictionRepository)
+        viewModel = ViewModelProvider(this, factory)[HomeViewModel::class.java]
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -65,20 +63,41 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Setup Quiz Results Adapter
         quizResultAdapter = QuizResultAdapter(
             onQuizResultClicked = { quizResult ->
                 viewModel.onEvent(QuizResultEvent.LoadQuizResult(quizResult))
             }
         )
-        /* Setup RecyclerView */
+
+        // Setup Category Adapter
+        categoryAdapter = CategoryAdapter(
+            onCategoryClicked = { category ->
+                // Navigate to DictionaryFragment with category filter
+                val bundle = bundleOf(
+                    "categoryId" to category.id,
+                    "categoryName" to category.displayName
+                )
+                findNavController().navigate(
+                    R.id.action_nav_home_to_nav_dictionary,
+                    bundle
+                )
+            }
+        )
+
+        // Setup Quiz Results RecyclerView
         binding.quizHistoryRecyclerView.apply {
             adapter = quizResultAdapter
             layoutManager = LinearLayoutManager(requireContext())
-            // You can also add ItemDecorations for spacing if needed
-            // addItemDecoration(DividerItemDecoration(requireContext(), LinearLayoutManager.VERTICAL))
         }
 
-// Setup empty state view click listener
+        // Setup Lessons RecyclerView
+        binding.lessonRecyclerView.apply {
+            adapter = categoryAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+
+        // Setup empty state view click listener
         binding.emptyStateText.setOnClickListener {
             findNavController().navigate(R.id.action_nav_home_to_nav_quiz)
         }
@@ -86,12 +105,11 @@ class HomeFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect { state ->
-                    // Submit the list of quiz results to the adapter
-                    val quizResults = state.quizResults // Assuming your state has a quizResults property
-                    quizResultAdapter.submitList(quizResults)
+                    // Submit quiz results
+                    quizResultAdapter.submitList(state.quizResults)
 
-                    // Handle empty state
-                    if (quizResults.isEmpty()) {
+                    // Handle empty state for quiz results
+                    if (state.quizResults.isEmpty()) {
                         binding.quizHistoryRecyclerView.visibility = View.GONE
                         binding.emptyStateText.visibility = View.VISIBLE
                         binding.emptyStateText.text = "No quiz results. Start new quiz"
@@ -100,7 +118,10 @@ class HomeFragment : Fragment() {
                         binding.emptyStateText.visibility = View.GONE
                     }
 
-                    // Handle other state changes like error messages, loading indicators, etc.
+                    // Submit categories
+                    categoryAdapter.submitList(state.categories)
+
+                    // Handle error messages
                     state.errorMessage?.let {
                         Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
                     }
@@ -110,7 +131,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupBottomNavigation() {
-        val bottomNav = binding.bottomNavigation // or find by ID
+        val bottomNav = binding.bottomNavigation
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
@@ -124,11 +145,11 @@ class HomeFragment : Fragment() {
                     true
                 }
                 R.id.bottom_nav_learn -> {
-                    findNavController().navigate(R.id.action_nav_home_to_nav_library)
+                    findNavController().navigate(R.id.action_nav_home_to_nav_dictionary)
                     true
                 }
                 R.id.bottom_nav_profile -> {
-                    // Handle profile navigation
+                    findNavController().navigate(R.id.action_nav_home_to_profileFragment)
                     true
                 }
                 else -> false
@@ -136,10 +157,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
-

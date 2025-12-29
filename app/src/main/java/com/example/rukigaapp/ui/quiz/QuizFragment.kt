@@ -213,21 +213,20 @@ class QuizFragment : Fragment() {
     }
 
     private fun SetQuestion() {
-        val quizBinding = FragmentQuizBinding.inflate(layoutInflater)
         val currentQuestion = viewModel.currentQuestion ?: run {
             // Show error message
             showError("No questions available")
             return
         }
-        quizBinding.answerInputLayout.visibility = if(viewModel.quizConfig?.isWritten == true) {
+        binding.answerInputLayout.visibility = if(viewModel.quizConfig?.isWritten == true) {
             View.VISIBLE
         } else {
             View.GONE
         }
         updateUI(currentQuestion)
 
-        quizBinding.nextButton.setOnClickListener() {
-            val answer = quizBinding.answerInput.text
+        binding.nextButton.setOnClickListener() {
+            val answer = binding.answerInput.text
             val mark = viewModel.markInput(answer.toString(), currentQuestion)
         }
     }

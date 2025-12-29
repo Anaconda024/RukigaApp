@@ -1,8 +1,10 @@
 package com.example.rukigaapp.services
 import androidx.annotation.WorkerThread
+import com.example.rukigaapp.data.CategoryItem
 import kotlinx.coroutines.flow.Flow
 
 import com.example.rukigaapp.data.Diction
+import com.example.rukigaapp.data.enums.Categories
 import com.example.rukigaapp.services.dao.DictionDao
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -45,5 +47,23 @@ class DictionRepository(private val dictionDao: DictionDao) {
         return dictionDao.getDictionsByCategory(categoryId)
     }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getWordCountByCategory(categoryId: Int): Int {
+        return dictionDao.getWordCountByCategory(categoryId)
+    }
 
+    @Suppress("RedundantSuspendModifier")
+    @WorkerThread
+    suspend fun getAllCategoriesWithCounts(): List<CategoryItem> {
+        return Categories.entries.map { category ->
+            val count = getWordCountByCategory(category.id)
+            CategoryItem(
+                id = category.id,
+                displayName = category.displayName,
+                color = category.color,
+                wordCount = count
+            )
+        }
+    }
 }

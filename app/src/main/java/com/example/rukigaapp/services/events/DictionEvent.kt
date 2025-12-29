@@ -16,5 +16,5 @@ sealed interface DictionEvent {
     data class ClearErrorMessage(val errorMessage: String?): DictionEvent
     data class SelectDiction(val diction: Diction) : DictionEvent
     data class SetDictionId(val id: Int) : DictionEvent
-
+    data class FilterByCategory(val categoryId: Int) : DictionEvent
 }

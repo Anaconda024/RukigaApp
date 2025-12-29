@@ -47,4 +47,8 @@ interface DictionDao {
 
     @Query("SELECT COUNT(*) FROM dictionaries")
     suspend fun getCount(): Int
+
+    // In DictionDao.kt
+    @Query("SELECT COUNT(*) FROM dictionaries WHERE categoryId = :categoryId AND deleted = 0")
+    suspend fun getWordCountByCategory(categoryId: Int): Int
 }

@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.androidx.room)
+    alias(libs.plugins.google.gms.googleServices)
 }
 
 android {
@@ -65,4 +66,20 @@ dependencies {
     //Room
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
+
+// Existing dependencies
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.room.runtime)
+
+    // Import the Firebase BoM (Bill of Materials)
+    // This allows you to manage all Firebase library versions with one BoM version
+    implementation(platform(libs.firebase.bom))
+
+    // Firebase Authentication
+    // Note: Version is omitted because it is controlled by the BoM above
+    implementation(libs.firebase.auth.ktx)
+
+    // Google Play Services for Sign-In
+    // Required for the "Sign in with Google" functionality
+    implementation(libs.google.auth)
 }
