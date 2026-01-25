@@ -21,7 +21,7 @@ import com.example.rukigaapp.data.DictionState
 import com.example.rukigaapp.data.enums.Categories
 import com.example.rukigaapp.databinding.DictionDialogBinding
 import com.example.rukigaapp.databinding.FragmentDictionaryBinding
-import com.example.rukigaapp.services.DictionRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
 import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.services.adapters.DictionAdapter

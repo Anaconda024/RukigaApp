@@ -76,5 +76,7 @@
     <string name="email_locked">Email is locked</string>
 
     <string name="default_web_client_id">26137426620-l15vnvf8mha3k1vpvch9d0ccujnsdemi.apps.googleusercontent.com</string>
+    <string name="search_word">Search for a word...</string>
+    <string name="search_icon">Search Icon</string>
 
 </resources>

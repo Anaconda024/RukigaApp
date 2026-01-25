@@ -3,8 +3,8 @@ package com.example.rukigaapp.ui.quiz
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
-import com.example.rukigaapp.services.DictionRepository
-import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
+import com.example.rukigaapp.services.repositories.QuizResultRepository
 
 class QuizViewModelFactory(
     private val repository: QuizResultRepository,

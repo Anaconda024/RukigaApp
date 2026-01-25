@@ -56,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         // Configure app bar with navigation
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_home, R.id.nav_dictionary, R.id.nav_quiz, R.id.loginFragment),
+            setOf(R.id.nav_home, R.id.nav_dictionary, R.id.nav_quiz,R.id.nav_library, R.id.loginFragment),
             binding.drawerLayout
         )
 

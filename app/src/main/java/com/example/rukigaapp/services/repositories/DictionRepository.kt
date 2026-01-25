@@ -1,13 +1,11 @@
-package com.example.rukigaapp.services
+package com.example.rukigaapp.services.repositories
+
 import androidx.annotation.WorkerThread
 import com.example.rukigaapp.data.CategoryItem
-import kotlinx.coroutines.flow.Flow
-
 import com.example.rukigaapp.data.Diction
 import com.example.rukigaapp.data.enums.Categories
 import com.example.rukigaapp.services.dao.DictionDao
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 
 class DictionRepository(private val dictionDao: DictionDao) {
     val allDiction: Flow<List<Diction>> = dictionDao.getDictions()

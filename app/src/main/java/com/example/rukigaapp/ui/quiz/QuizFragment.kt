@@ -25,9 +25,9 @@ import com.example.rukigaapp.data.enums.QuizCategories
 import com.example.rukigaapp.databinding.DictionDialogBinding
 import com.example.rukigaapp.databinding.FragmentQuizBinding
 import com.example.rukigaapp.databinding.QuizSetupDialogBinding
-import com.example.rukigaapp.services.DictionRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
-import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.repositories.QuizResultRepository
 import com.example.rukigaapp.services.dao.QuizResultDao
 import com.example.rukigaapp.services.events.DictionEvent
 import com.example.rukigaapp.services.events.QuizResultEvent
@@ -38,6 +38,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.TimeZone
 import android.R
 import com.example.rukigaapp.databinding.DialogQuizCompletionBinding
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.datetime.toLocalDateTime
 
 class QuizFragment : Fragment() {
@@ -51,6 +52,8 @@ class QuizFragment : Fragment() {
     private lateinit var quizDao: QuizResultDao
     private lateinit var repository: QuizResultRepository
     private lateinit var factory: QuizViewModelFactory
+    private lateinit var auth: FirebaseAuth
+
 
 
     override fun onCreateView(
@@ -60,6 +63,7 @@ class QuizFragment : Fragment() {
     ): View {
 
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
+        auth = FirebaseAuth.getInstance()
         val root: View = binding.root
 
         val quizDao = LearnKigaDatabase.getDatabase(requireContext()).quizResultDao()
@@ -228,6 +232,7 @@ class QuizFragment : Fragment() {
         binding.nextButton.setOnClickListener() {
             val answer = binding.answerInput.text
             val mark = viewModel.markInput(answer.toString(), currentQuestion)
+            nextQuestion()
         }
     }
 
@@ -240,7 +245,8 @@ class QuizFragment : Fragment() {
     public fun saveQuizResult() {
         val score = viewModel.quizConfig?.numberOfQuestions!! - viewModel.answeredWrong.size
         val dateTaken = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-        val userId = "Ankunda" // Hardcoded for now
+        // Get the actual logged-in user's name
+        val userId = getCurrentUserId()
 
         val quizResult = QuizResult(
             dateTaken = dateTaken.toString(),
@@ -331,6 +337,20 @@ class QuizFragment : Fragment() {
     fun lastQuestionCheck(){
         if(viewModel.currentQuestionIndex == viewModel.quizQuestionsState.value.size - 1) {
         binding.nextButton.text = getString(com.example.rukigaapp.R.string.finish)
+        }
+    }
+
+    private fun getCurrentUserId(): String {
+        val currentUser = auth.currentUser
+        return when {
+            // First priority: display name
+            !currentUser?.displayName.isNullOrBlank() -> currentUser?.displayName!!
+            // Second priority: email (take part before @)
+            !currentUser?.email.isNullOrBlank() -> {
+                currentUser?.email?.substringBefore('@') ?: "Guest"
+            }
+            // Fallback: Guest
+            else -> "Guest"
         }
     }
 }

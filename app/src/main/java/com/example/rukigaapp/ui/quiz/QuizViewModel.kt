@@ -11,8 +11,8 @@ import com.example.rukigaapp.data.QuizResult
 import com.example.rukigaapp.data.QuizResultState
 import com.example.rukigaapp.data.QuizUiState
 import com.example.rukigaapp.data.SortType
-import com.example.rukigaapp.services.DictionRepository
-import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
+import com.example.rukigaapp.services.repositories.QuizResultRepository
 import com.example.rukigaapp.services.events.QuizResultEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -2,7 +2,7 @@ package com.example.rukigaapp.ui.dictionary
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rukigaapp.services.DictionRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
 
 class DictionaryViewModelFactory(
     private val repository: DictionRepository

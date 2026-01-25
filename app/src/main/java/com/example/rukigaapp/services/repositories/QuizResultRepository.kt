@@ -1,4 +1,4 @@
-package com.example.rukigaapp.services
+package com.example.rukigaapp.services.repositories
 
 import androidx.annotation.WorkerThread
 import com.example.rukigaapp.data.QuizResult

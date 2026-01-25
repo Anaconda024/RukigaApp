@@ -16,9 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rukigaapp.R
 import com.example.rukigaapp.databinding.FragmentHomeBinding
-import com.example.rukigaapp.services.DictionRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
 import com.example.rukigaapp.services.LearnKigaDatabase
-import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.repositories.QuizResultRepository
 import com.example.rukigaapp.services.adapters.CategoryAdapter
 import com.example.rukigaapp.services.adapters.QuizResultAdapter
 import com.example.rukigaapp.services.events.QuizResultEvent
@@ -146,6 +146,10 @@ class HomeFragment : Fragment() {
                 }
                 R.id.bottom_nav_learn -> {
                     findNavController().navigate(R.id.action_nav_home_to_nav_dictionary)
+                    true
+                }
+                R.id.bottom_nav_library -> {
+                    findNavController().navigate(R.id.action_nav_home_to_libraryFragment)
                     true
                 }
                 R.id.bottom_nav_profile -> {

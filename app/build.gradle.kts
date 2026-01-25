@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.androidx.room)
     alias(libs.plugins.google.gms.googleServices)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -82,4 +83,8 @@ dependencies {
     // Google Play Services for Sign-In
     // Required for the "Sign in with Google" functionality
     implementation(libs.google.auth)
+
+    // Hilt dependencies using the catalog aliases
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

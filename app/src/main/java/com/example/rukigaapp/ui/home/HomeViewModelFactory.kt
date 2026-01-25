@@ -2,8 +2,8 @@ package com.example.rukigaapp.ui.home // Or wherever your HomeFragment is
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.rukigaapp.services.DictionRepository
-import com.example.rukigaapp.services.QuizResultRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
+import com.example.rukigaapp.services.repositories.QuizResultRepository
 
 // The factory takes any dependencies the ViewModel needs as arguments
 class HomeViewModelFactory(

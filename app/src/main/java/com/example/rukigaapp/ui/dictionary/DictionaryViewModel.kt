@@ -7,7 +7,7 @@ import com.example.rukigaapp.data.Diction
 import com.example.rukigaapp.data.DictionState
 import com.example.rukigaapp.data.SortType
 import com.example.rukigaapp.services.events.DictionEvent
-import com.example.rukigaapp.services.DictionRepository
+import com.example.rukigaapp.services.repositories.DictionRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine

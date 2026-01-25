@@ -9,6 +9,10 @@
         android:icon="@drawable/ic_open_book_text"
         android:title="@string/dictionary" />
     <item
+        android:id="@+id/bottom_nav_library"
+        android:icon="@drawable/ic_format_list_bulleted"
+        android:title="@string/library" />
+    <item
         android:id="@+id/bottom_nav_profile"
         android:icon="@drawable/ic_user"
         android:title="@string/profile" />
